@@ -163,8 +163,8 @@ jobs:
           input-file: "./CHANGELOG.md"
           output-file: "./CHANGELOG.md"
           # tag-prefix: "v"
-          pre-release: "${{github.event_name == 'pull_request'}}"
-          pre-release-identifier: "alpha"
+          # pre-release: "${{github.event_name == 'pull_request'}}"
+          # pre-release-identifier: "alpha"
           skip-on-empty: 'false'
           # release-count: 20
           skip-git-pull: true
@@ -179,10 +179,15 @@ jobs:
           release_name: ${{ steps.changelog.outputs.tag }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
 
-      - name: export tag for final build
+      - name: Export tag for final build
         id: docker_tag
         run: |
-          echo "TAG=${{ steps.changelog.outputs.tag }}" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.ref }}" == "refs/heads/main"]]; then
+            echo "TAG=${{ github.head_ref }}-${{ github.event.number }}" >> $GITHUB_OUTPUT
+          else
+            echo "TAG=${{ steps.changelog.outputs.tag }}" >> $GITHUB_OUTPUT
+          fi
+
          
          
 # NEXT JOB #######################################################################  
