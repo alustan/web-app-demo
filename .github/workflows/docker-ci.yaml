@@ -182,11 +182,12 @@ jobs:
       - name: Export tag for final build
         id: docker_tag
         run: |
-          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.ref }}" == "refs/heads/main"]]; then
+          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "TAG=${{ github.head_ref }}-${{ github.event.number }}" >> $GITHUB_OUTPUT
           else
             echo "TAG=${{ steps.changelog.outputs.tag }}" >> $GITHUB_OUTPUT
           fi
+
 
          
          
