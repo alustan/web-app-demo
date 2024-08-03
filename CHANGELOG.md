@@ -1,3 +1,5 @@
+## [1.0.10](https://github.com/alustan/web-app-demo/compare/1.0.9...1.0.10) (2024-08-03)
+
 ## [1.0.9](https://github.com/alustan/web-app-demo/compare/1.0.8...1.0.9) (2024-08-02)
 
 ## [1.0.8](https://github.com/alustan/web-app-demo/compare/v1.0.7...1.0.8) (2024-08-02)
