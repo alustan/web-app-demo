@@ -7,9 +7,9 @@ COPY package.json yarn.lock ./
 COPY packages packages
 
 # Comment this out if you don't have any internal plugins
-COPY plugins plugins
+# COPY plugins plugins
 
-RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
+# RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
 
 # Stage 2 - Install dependencies and build packages
 FROM node:18-bookworm-slim AS build
