@@ -7,11 +7,11 @@ on:
       - main
     types: [opened, synchronize, reopened]
 
-  push:
-    branches:
-      - main
 
   workflow_dispatch:
+    inputs:
+      RELEASE_TAG:
+        description: '{Major}.{Minor}.{Patch}'
 
 
 jobs:
@@ -126,14 +126,9 @@ jobs:
           sarif_file: 'trivy-results.sarif'
 
 # NEXT JOB ####################################################################### 
-#  generates changelog.MD  or add to an existing one and create releases using conventional commits.
-#  creates prelease when a pull request is made to main branch if a succesful test image 
-#  was built, with succesful unit and integration test.
-# creates a release when a merge is made to the main branch
-#  and adds either the prelease or released version to github output
-# to be used by final image published to docker hub
-  changelog:
-    name: automated changelog using conventional commit
+# export tag
+  export-tag:
+    name: export tag
     needs: [build-test-image, scan-image]
     runs-on: ubuntu-latest
     outputs:
@@ -143,49 +138,13 @@ jobs:
      
 
     steps:
-      - name: check out the repository with all releases
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: 'false'
-          ref: ${{github.event.repository.default_branch}}
-
-      
-
-      - name: conventional Changelog Action
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@v5.1.0
-        with:
-          github-token: ${{ secrets.RELEASE_MAIN }}
-          # version-file: "./package.json"
-          git-branch: ${{github.event.repository.default_branch}}
-          preset: "conventionalcommits"
-          input-file: "./CHANGELOG.md"
-          output-file: "./CHANGELOG.md"
-          tag-prefix: ""
-          # pre-release: "${{github.event_name == 'pull_request'}}"
-          # pre-release-identifier: "alpha"
-          skip-on-empty: 'false'
-          # release-count: 20
-          skip-git-pull: true
-
-      - name: Create Release
-        uses: actions/create-release@v1
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        env:
-         GITHUB_TOKEN: ${{ secrets.RELEASE_MAIN }}
-        with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
-          release_name: ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
-
       - name: Export tag for final build
         id: docker_tag
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "TAG=${{ github.head_ref }}-${{ github.event.number }}" >> $GITHUB_OUTPUT
           else
-            echo "TAG=${{ steps.changelog.outputs.tag }}" >> $GITHUB_OUTPUT
+            echo "TAG=${{ inputs.RELEASE_TAG }}" >> $GITHUB_OUTPUT
           fi
 
 
