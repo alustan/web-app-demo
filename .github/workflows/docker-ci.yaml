@@ -157,7 +157,7 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v5.1.0
         with:
           github-token: ${{ secrets.RELEASE_MAIN }}
-          version-file: "./package.json"
+          # version-file: "./package.json"
           git-branch: ${{github.event.repository.default_branch}}
           preset: "conventionalcommits"
           input-file: "./CHANGELOG.md"
