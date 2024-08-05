@@ -155,7 +155,7 @@ jobs:
 # and image:v*.*.*-alpha.* tag to pull requests made to main branch before pushing to dockerhub
   build-final-image:
     name: Build Final Image
-    needs: [ scan-image]
+    needs: [ scan-image,export-tag]
     runs-on: ubuntu-latest
 
     permissions:
