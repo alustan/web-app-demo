@@ -1,8 +1,9 @@
-.git
-.yarn/cache
-.yarn/install-state.gz
+Dockerfile
+.dockerignore
 node_modules
-packages/*/src
-packages/*/node_modules
-plugins
-*.local.yaml
+npm-debug.log
+README.md
+.next
+!.next/static
+!.next/standalone
+.git
