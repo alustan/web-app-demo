@@ -155,7 +155,7 @@ jobs:
 # and image:v*.*.*-alpha.* tag to pull requests made to main branch before pushing to dockerhub
   build-final-image:
     name: Build Final Image
-    needs: [ scan-image,changelog]
+    needs: [ scan-image]
     runs-on: ubuntu-latest
 
     permissions:
@@ -192,7 +192,7 @@ jobs:
             latest=false
           tags: |
             type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
-            type=raw,value=${{needs.changelog.outputs.TAG}}
+            type=raw,value=${{needs.export-tag.outputs.TAG}}
 
       - name: Add labels 
         uses: actions-ecosystem/action-add-labels@v1
