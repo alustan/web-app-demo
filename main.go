@@ -76,6 +76,7 @@ func HandleError(result interface{}, err error) (r interface{}) {
 	return result
 }
 
+
 func main() {
 	redisMaster := flag.String("redis-master", "", "Redis master (e.g. redis-master:6379)")
 	redisReplica := flag.String("redis-replica", "", "Redis replica (e.g. redis-replica:6379)")
@@ -96,5 +97,5 @@ func main() {
 
 	n := negroni.Classic()
 	n.UseHandler(r)
-	n.Run(":3000")
+	n.Run(":8000")
 }
